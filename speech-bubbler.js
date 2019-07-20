@@ -256,7 +256,6 @@ class Bubbler {
       .map( ( l, i, a ) => {
         const re = new RegExp( '\s'.concat( this.edge.right, '$' ) );
         const isSurplus = a.every( ( _l ) => { return _l.match( re ); } ) && this.margin.length === 0;
-        //console.log( isSurplus );
         if( isSurplus ) {
           return l.replace( re, this.edge.right );
         }
@@ -283,6 +282,7 @@ class Bubbler {
     const isInt = Number.isInteger( maxLength );
     const appendUpper = isInt ? '' : this.edge.appendUpper;
     const appendLower = isInt ? '' : this.edge.appendLower;
+
     const upper = String().concat(
       cornerUpperLeft,
       edgeUpper.repeat( maxLength - this.edge.upperReduceAmount ).concat( appendUpper ),
@@ -295,10 +295,7 @@ class Bubbler {
         }
         return accum.concat( c );
       }, '' ).replace( /━━┷━━/, '-━┷━-' );
-    //console.log( Math.floor( this.getLengthOstensible( upper ) / 2 ) );
-    //console.log( this.getLengthOstensible( upper ) );
-    //console.log( this.getLengthOstensible( this.edge.upperCenter ) );
-    //console.log( ( this.edge.upperCenter ) );
+
     const lower = String().concat(
       cornerLowerLeft,
       edgeLower.repeat( maxLength - this.edge.lowerReduceAmount ).concat( appendLower ),
@@ -359,9 +356,6 @@ class Bubbler {
 
 //this ones works well as above
 //http://tanakh.jp/tools/sudden.html
-//console.log( require );
-//console.log( module );
-//console.log( process.stdin.isTTY );
 if ( typeof require !== 'undefined' && require.main === module && !process.stdin.isTTY ) {
   //console.log( 'called directly' );
   new Bubbler().main();
@@ -373,11 +367,11 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   const b = new Bubbler();
   b.setMargin( 0 );
   b.setEdge( 'rectanble' );
-  console.log( b.render( '突然の死\nだまりゃ!\nだまりゃ!\nだまりゃ!!!', '?vertical=0' ) );
+  console.log( b.render( '僕アルバイトォォｫｫ!!', '?vertical=0' ) );
   b.setEdge( 'label' );
-  console.log( b.render( '痔ががががががががが\nなおりますように', '?vertical=0' ) );
-  b.setEdge( 'default' );
   console.log( b.render( '突然の死\n複線ドリフト!!!', '' ) );
+  b.setEdge( 'default' );
+  console.log( b.render( '痔が\nなおりますように', '?vertical=0' ) );
   const contents = require( './test/contents.json' );
   contents.bubblerRender
     .forEach( ( obj ) => {
