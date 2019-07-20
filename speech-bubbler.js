@@ -11,12 +11,57 @@
 
 //https://uxmilk.jp/50240
 const breaks = /\r\n|\n|\r/;
-const edgeLeft = '＞　';
-const edgeRight = '　＜';
 
 class Bubbler {
 
   constructor() {
+    this.bubbleEdges = {
+      'default': {
+        left: '＞',
+        right: '＜',
+        upper: '人',
+        lower: '^Y',
+        upperCenter: '人',
+        cornerUpperLeft: '＿',
+        cornerUpperRight: '＿',
+        cornerLowerLeft: '￣',
+        cornerLowerRight: '￣'
+      },
+      'rectanble': {
+        left: '│',
+        right: '│',
+        upper: '─',
+        lower: '─',
+        upperCenter: '─',
+        cornerUpperLeft: '┌',
+        cornerUpperRight: '┐',
+        cornerLowerLeft: '└',
+        cornerLowerRight: '┘'
+      },
+      'label': {
+        left: '┃',
+        right: '┃',
+        upper: '━',
+        lower: '━',
+        upperCenter: '┷',
+        cornerUpperLeft: '┏',
+        cornerUpperRight: '┓',
+        cornerLowerLeft: '┗',
+        cornerLowerRight: '┛'
+      }
+    };
+    this.edge = this.bubbleEdges.default;
+    this.margin = '　'.repeat( 1 );
+  }
+
+  setMargin( int ) {
+    this.margin = '　'.repeat( int );
+  }
+
+  setEdge( type ) {
+    if( typeof type === 'string' && this.bubbleEdges[ type ] ) {
+      this.edge = this.bubbleEdges[ type ];
+    }
   }
 
   /**
@@ -136,6 +181,8 @@ class Bubbler {
    */
   padding( str, distance, centering ) {
     const pad = String().concat( '　'.repeat( Math.ceil( distance ) ) );
+    const edgeLeft = this.edge.left.concat( this.margin );
+    const edgeRight = this.margin.concat( this.edge.right );
     if( centering ) {
       const pads = [
         Math.trunc( pad.length / 2 ),
@@ -173,6 +220,8 @@ class Bubbler {
       centering = true;
     }
 
+    const edgeLeft = this.edge.left.concat( this.margin );
+    const edgeRight = this.margin.concat( this.edge.right );
     return str.split( breaks )
       .map( ( l ) => {
         return String().concat( edgeLeft, l, edgeRight );
@@ -283,7 +332,10 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
 } else if( typeof require !== 'undefined' && require.main === module && process.stdin.isTTY ) {
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
 
-  console.log( new Bubbler().render( '突然の死', '?vertical=0' ) );
+  const b = new Bubbler();
+  b.setMargin( 0 );
+  b.setEdge( 'rectanble' );
+  console.log( b.render( '突然の死', '?vertical=0' ) );
   const contents = require( './test/contents.json' );
   contents.bubblerRender
     .forEach( ( obj ) => {
