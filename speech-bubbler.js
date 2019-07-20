@@ -10,6 +10,85 @@
 'use strict';
 
 /**
+ * vertmap
+ *
+ * @param str
+ * @returns {undefined}
+ */
+function vertmap( str ) {
+  const ignoreChars = [
+    /\!/,
+    /\?/
+  ];
+  const containsDoubleWith = ( str.match( /[^\x20-\x7E\xA1-\xDF\s]/ ) );
+  const pad = ( containsDoubleWith ? '　' : ' ' );
+
+  const ignoreCharDouble = '＜ＩＧＨＯＲＥＣＨＡＲＤＯＵＢＬＥ＝';
+
+  return str
+    .split( '\n' )
+    .map( ( s, i, a ) => {
+      const max = Math.max( ...a.map( ( _l ) => _l.length ) );
+      return s.concat( pad.repeat( max - s.length ) );
+    } )
+    .map( ( s ) => {
+      return s.split( '' );
+    } )
+    .map( ( s, index ) => {
+      return s.map( ( c, i ) => {
+        return {
+          char: c,
+          x: i,
+          y: index
+        };
+      } );
+    } )
+    .reduce( ( accum, current ) => {
+      const cloneAccum = [...accum]; //https://www.samanthaming.com/tidbits/35-es6-way-to-clone-an-array
+      current.forEach( ( curr ) => {
+        if( !cloneAccum[ curr.x ] ) {
+          cloneAccum[ curr.x ] = [];
+        }
+        cloneAccum[ curr.x ][ curr.y ] = curr.char;
+      } );
+      return cloneAccum;
+    }, [] )
+    .reduce( ( accum, chars, index, array ) => {
+      const curr = chars
+        .map( ( c, i ) => {
+          if( accum[ index - 1 ] && accum[ index - 1 ][ i ].match( new RegExp( ignoreCharDouble ) ) ) {
+            return '';
+          }
+
+          const foldUp = [
+            //containsDoubleWith,
+            array[ index + 1 ] && ignoreChars.some( ( ic ) => array[ index + 1 ][ i ].match( ic ) ),
+            ignoreChars.some( ( ic ) => c.match( ic ) )
+          ]
+            .every( ( isAffirmative ) => {
+              return isAffirmative;
+            } );
+
+          if( foldUp ) {
+            return ignoreCharDouble + c + array[ index + 1 ][ i ] + '＞';
+          }
+
+          return c;
+        } );
+      return accum.concat( [ curr ] );
+    }, [] )
+    .filter( ( chars ) => {
+      return !chars.join( '' ).match( new RegExp( '^' + pad + '+$' ) );
+    } )
+    .map( ( chars ) => {
+      return chars.reverse().join( '' );
+    } )
+    .join( '\n' )
+    .replace( new RegExp( '([\x20-\x7E\xA1-\xDF])', 'g' ), ' $1' )
+    .replace( new RegExp( '＜ＩＧＨＯＲＥＣＨＡＲＤＯＵＢＬＥ＝(.+)＞', 'g' ), ( m, p1 ) => { return p1.replace( /\s/g, '' ); } );
+}
+
+/**
  * parseQueries
  * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
  * @param arg
@@ -195,6 +274,9 @@ if ( require.main === module && !process.stdin.isTTY ) {
   console.log( render( 'どうしたんだ\n今日に限って8200が\nやけにノロく感じる!!' ) );
   console.log( render( 'ｸｿｯﾀﾚが\nﾊﾟﾝﾀ一基\n下がってんじゃねーのか！？' ) );
   console.log( render( 'だまりゃ！麿は恐れ多くも帝より三位の位を賜わり中納言を務めた身じゃ！\nすなわち帝の臣であって徳川の家来ではおじゃらん！\nその麿の屋敷内で狼藉を働くとは言語道断！\nこの事直ちに帝に言上し、きっと公儀に掛け合うてくれる故、心しておじゃれ！', 'https://hoge.com?align=center') );
+  console.log( vertmap( '複線\nドリフト!!' ) );
+  console.log( '' );
+  console.log( vertmap( 'Multi-\nTrack\nDrifting!!' ) );
 }else if( module ) {
   //console.log('required as a module');
   //this is for developers, for unit testing framework
