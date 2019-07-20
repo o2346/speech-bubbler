@@ -267,18 +267,15 @@ class Bubbler {
 
 //this ones works well as above
 //http://tanakh.jp/tools/sudden.html
+//console.log( require );
+//console.log( module );
+//console.log( process.stdin.isTTY );
 if ( typeof require !== 'undefined' && require.main === module && !process.stdin.isTTY ) {
   //console.log( 'called directly' );
   new Bubbler().main();
   //https://www.google.co.jp/search?&tbm=isch&safe=off&q=高橋啓介の8200系個別分散式VVVFはダテじゃねえ+複線ドリフト
   //console.log( render( '僕アルバイトォォｫｫ!!' ) );
-} else if( typeof module === 'undefined' ) {
-  // should be a browser on client
-} else if( typeof module !== 'undefined' ) {
-  //console.log('required as a module');
-  //this is for developers, for unit testing framework
-  module.exports = Bubbler;
-} else if ( typeof require !== 'undefined' && require.main ) {
+} else if( typeof require !== 'undefined' && require.main === module && process.stdin.isTTY ) {
   console.log( new Bubbler().render( '複線\nﾄﾞﾘﾌﾄ!!' ) );
   console.log( new Bubbler().render( 'はっえぇーーっ!!\nバカッ速!!\n高橋啓介の8200系\n個別分散式VVVFはダテじゃねぇ' ) );
   console.log( new Bubbler().render( '勝負になんねー\n2000系のフル加速なんて\nまるで止まってるようにしか\n見えねーよｫ!!' ) );
@@ -288,4 +285,10 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   console.log( new Bubbler().vertmap( '複線\nドリフト!!' ) );
   console.log( '' );
   console.log( new Bubbler().vertmap( 'Multi-\nTrack\nDrifting!!' ) );
+} else if( typeof module === 'undefined' ) {
+  // should be a browser on client
+} else if( typeof module !== 'undefined' ) {
+  //console.log('required as a module');
+  //this is for developers, for unit testing framework
+  module.exports = Bubbler;
 }
