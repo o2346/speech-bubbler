@@ -6,13 +6,13 @@ An immitation among [Sudden-death Generators（突然の死ジェネレータ）
 
 Despite there are already many of predecessors in this field, I was still motivated to create my own to acheve:
 
-lightweight ECMAScript
-works on both client(browser) & server(node.js)
-supports:
-Multiple EdgeTypes
-Vertical Lines
-margin
-etc
+* lightweight ECMAScript
+* works on both client(browser) & server(node.js)
+* supports:
+    * Multiple EdgeTypes
+    * Vertical Lines
+    * margin
+    * etc
 
 ## Usage
 
