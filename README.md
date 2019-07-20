@@ -11,7 +11,7 @@ Despite there are already many of predecessors in this field, I was still motiva
 * supports:
     * Multiple EdgeTypes
     * Vertical Lines
-    * margin
+    <!--* margin -->
     * etc
 
 ## Usage
