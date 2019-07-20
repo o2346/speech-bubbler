@@ -4,7 +4,8 @@
   "description": "An immitation among [Sudden-death Generators（突然の死ジェネレータ）](https://www.google.co.jp/search?safe=off&num=24&hl=en&q=%E7%AA%81%E7%84%B6%E3%81%AE%E6%AD%BB+%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF)",
   "main": "speech-bubbler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test.*.js",
+    "tw": "nodemon -e js,json,txt -x 'npm test'"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,9 @@
   "bugs": {
     "url": "https://github.com/o2346/speech-bubbler/issues"
   },
-  "homepage": "https://github.com/o2346/speech-bubbler#readme"
+  "homepage": "https://github.com/o2346/speech-bubbler#readme",
+  "devDependencies": {
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1"
+  }
 }
