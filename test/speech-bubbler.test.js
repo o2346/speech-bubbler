@@ -17,7 +17,7 @@ describe( 'speech-bubbler', () => {
       );
 
       it( subject, () => {
-        const expected = fs.readFileSync( 'test/' + obj.path ).toString();
+        const expected = fs.readFileSync( 'test/' + obj.path ).toString().replace( /[\n\r]$/, '' );
         const actual   = bubbler.render( obj.text, obj.option );
         assert.deepEqual( expected, actual );
       } );
