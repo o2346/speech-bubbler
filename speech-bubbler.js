@@ -251,7 +251,7 @@ class Bubbler {
       } )
       .map( ( l, i, a ) => {
         const maxLength = Math.max( ...a.map( ( _l ) => { return this.getLengthOstensible( _l ); } ) );
-        return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), ' '.concat( this.edge.right ) );
+        return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), this.margin.concat( this.edge.right ) );
       } )
       .map( ( l, i, a ) => {
         const re = new RegExp( '\s'.concat( this.edge.right, '$' ) );
@@ -371,11 +371,12 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
 
   const b = new Bubbler();
-  b.setMargin( 1 );
+  b.setMargin( 0 );
   b.setEdge( 'rectanble' );
-  console.log( b.render( '突然の死', '?vertical=0' ) );
+  console.log( b.render( '突然の死\nだまりゃ!\nだまりゃ!\nだまりゃ!!!', '?vertical=0' ) );
   b.setEdge( 'label' );
-  console.log( b.render( '突然の死', '?vertical=0' ) );
+  console.log( b.render( '痔ががががががががが\nなおりますように', '?vertical=0' ) );
+  b.setEdge( 'default' );
   console.log( b.render( '突然の死\n複線ドリフト!!!', '' ) );
   const contents = require( './test/contents.json' );
   contents.bubblerRender
