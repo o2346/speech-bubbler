@@ -284,7 +284,6 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   console.log( new Bubbler().vertmap( 'Multi-\nTrack\nDrifting!!' ) );
 }else if( typeof module === 'undefined' ) {
   // should be a browser on client
-  console.log( Bubbler );
 } else {
   //console.log('required as a module');
   //this is for developers, for unit testing framework

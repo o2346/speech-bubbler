@@ -2,7 +2,15 @@
 <html>
     <body>
         <script src="/home/magi/Documents/speech-bubbler/speech-bubbler.js"></script>
-        <script type="text/javascript">document.write( new Bubbler().render( '複線\nドリフト!!' ).replace( /[\n\r]/g, '<br>' ) );</script>
+        <script type="text/javascript">
+          document.write(
+            String().concat(
+              '<div>',
+              new Bubbler().render( '複線\nドリフト!!' ).replace( /\n/g, '<br>' ),
+              '</div>'
+            )
+          );
+        </script>
     </body>
 </html>
 
