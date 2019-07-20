@@ -25,29 +25,41 @@ class Bubbler {
         cornerUpperLeft: '＿',
         cornerUpperRight: '＿',
         cornerLowerLeft: '￣',
-        cornerLowerRight: '￣'
+        cornerLowerRight: '￣',
+        upperReduceAmount: 2,
+        lowerReduceAmount: 3,
+        appendUpper: '',
+        appendLower: '^Y',
       },
       'rectanble': {
         left: '│',
         right: '│',
-        upper: '─',
-        lower: '─',
+        upper: '──',
+        lower: '──',
         upperCenter: '─',
         cornerUpperLeft: '┌',
         cornerUpperRight: '┐',
         cornerLowerLeft: '└',
-        cornerLowerRight: '┘'
+        cornerLowerRight: '┘',
+        upperReduceAmount: 2,
+        lowerReduceAmount: 2,
+        appendUpper: '─',
+        appendLower: '─',
       },
       'label': {
         left: '┃',
         right: '┃',
-        upper: '━',
-        lower: '━',
+        upper: '━━',
+        lower: '━━',
         upperCenter: '┷',
         cornerUpperLeft: '┏',
         cornerUpperRight: '┓',
         cornerLowerLeft: '┗',
-        cornerLowerRight: '┛'
+        cornerLowerRight: '┛',
+        upperReduceAmount: 2,
+        lowerReduceAmount: 2,
+        appendUpper: '━',
+        appendLower: '━',
       }
     };
     this.edge = this.bubbleEdges.default;
@@ -239,7 +251,16 @@ class Bubbler {
       } )
       .map( ( l, i, a ) => {
         const maxLength = Math.max( ...a.map( ( _l ) => { return this.getLengthOstensible( _l ); } ) );
-        return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), ' ＜' );
+        return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), ' '.concat( this.edge.right ) );
+      } )
+      .map( ( l, i, a ) => {
+        const re = new RegExp( '\s'.concat( this.edge.right, '$' ) );
+        const isSurplus = a.every( ( _l ) => { return _l.match( re ); } ) && this.margin.length === 0;
+        //console.log( isSurplus );
+        if( isSurplus ) {
+          return l.replace( re, this.edge.right );
+        }
+        return l;
       } )
       .join( '\n' );
   }
@@ -251,26 +272,43 @@ class Bubbler {
    * @returns {undefined}
    */
   getUpperLower( str ) {
-    const edgeUpper    = '人';
-    const edgeLower    = '^Y';
-    const cornerUpper = '＿';
-    const cornerLower = '￣';
+    const edgeUpper    = this.edge.upper;
+    const edgeLower    = this.edge.lower;
+    const cornerUpperLeft  = this.edge.cornerUpperLeft;
+    const cornerUpperRight  = this.edge.cornerUpperRight;
+    const cornerLowerLeft  = this.edge.cornerLowerLeft;
+    const cornerLowerRight  = this.edge.cornerLowerRight;
 
     const maxLength = Math.max( ...str.split( breaks ).map( ( _l ) => { return this.getLengthOstensible( _l ); } ) );
+    const isInt = Number.isInteger( maxLength );
+    const appendUpper = isInt ? '' : this.edge.appendUpper;
+    const appendLower = isInt ? '' : this.edge.appendLower;
     const upper = String().concat(
-      cornerUpper,
-      edgeUpper.repeat( maxLength - 2 ),
-      cornerUpper
-    );
+      cornerUpperLeft,
+      edgeUpper.repeat( maxLength - this.edge.upperReduceAmount ).concat( appendUpper ),
+      cornerUpperRight
+    )
+      .split( '' )
+      .reduce( ( accum, c, i, a ) => {
+        if( i === Math.floor( a.length / 2 ) - 1 ) {
+          return accum.concat( this.edge.upperCenter );
+        }
+        return accum.concat( c );
+      }, '' ).replace( /━━┷━━/, '-━┷━-' );
+    //console.log( Math.floor( this.getLengthOstensible( upper ) / 2 ) );
+    //console.log( this.getLengthOstensible( upper ) );
+    //console.log( this.getLengthOstensible( this.edge.upperCenter ) );
+    //console.log( ( this.edge.upperCenter ) );
     const lower = String().concat(
-      cornerLower,
-      edgeLower.repeat( maxLength - 3 ),
-      cornerLower
+      cornerLowerLeft,
+      edgeLower.repeat( maxLength - this.edge.lowerReduceAmount ).concat( appendLower ),
+      cornerLowerRight
     )
       .replace(
-        new RegExp( '^' + cornerLower + '\\' + edgeLower ),
-        ' ' + cornerLower + 'Y'
-      );
+        ( this.edge === this.bubbleEdges.default ? new RegExp( '^' + cornerLowerLeft + '\\' + edgeLower ) : /$^/ ),
+        ' ' + cornerLowerLeft + 'Y'
+      )
+      .replace( /^￣￣$/, '￣Y￣' );
 
     return [ upper, lower ];
   }
@@ -333,9 +371,12 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
 
   const b = new Bubbler();
-  b.setMargin( 0 );
+  b.setMargin( 1 );
   b.setEdge( 'rectanble' );
   console.log( b.render( '突然の死', '?vertical=0' ) );
+  b.setEdge( 'label' );
+  console.log( b.render( '突然の死', '?vertical=0' ) );
+  console.log( b.render( '突然の死\n複線ドリフト!!!', '' ) );
   const contents = require( './test/contents.json' );
   contents.bubblerRender
     .forEach( ( obj ) => {
