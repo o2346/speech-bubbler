@@ -235,7 +235,12 @@ class Bubbler {
     if( !str ) {
       return null;
     }
-    const contents = this.obtainInnerContents( str, queries );
+    let contents = null;
+    if( this.parseQueries( 'vertical', queries ) ) {
+      contents = this.obtainInnerContents( this.vertmap( str ), queries );
+    } else {
+      contents = this.obtainInnerContents( str, queries );
+    }
     const uplw     = this.getUpperLower( contents );
 
     return [
@@ -276,18 +281,14 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   //https://www.google.co.jp/search?&tbm=isch&safe=off&q=高橋啓介の8200系個別分散式VVVFはダテじゃねえ+複線ドリフト
   //console.log( render( '僕アルバイトォォｫｫ!!' ) );
 } else if( typeof require !== 'undefined' && require.main === module && process.stdin.isTTY ) {
-  function writeto(  data, file ) {
-    require( 'fs' ).writeFileSync( file, data );
-  }
-  writeto( new Bubbler().render( '複線\nﾄﾞﾘﾌﾄ!!' ), 'test/multi_track_drifting.txt' );
-  writeto( new Bubbler().render( 'はっえぇーーっ!!\nバカッ速!!\n高橋啓介の8200系\n個別分散式VVVFはダテじゃねぇ' ), 'test/impressive_8200_vvvf.txt' );
-  writeto( new Bubbler().render( '勝負になんねー\n2000系のフル加速なんて\nまるで止まってるようにしか\n見えねーよｫ!!' ), 'test/2000_full_throttling_is_like_sitting_down.txt' );
-  writeto( new Bubbler().render( 'どうしたんだ\n今日に限って8200が\nやけにノロく感じる!!' ), 'test/8200_is_too_fucking_slow.txt' );
-  writeto( new Bubbler().render( 'ｸｿｯﾀﾚが\nﾊﾟﾝﾀ一基\n下がってんじゃねーのか！？' ), 'test/is_a_pantograph_fucking_down.txt' );
-  writeto( new Bubbler().render( 'だまりゃ！麿は恐れ多くも帝より三位の位を賜わり中納言を務めた身じゃ！\nすなわち帝の臣であって徳川の家来ではおじゃらん！\nその麿の屋敷内で狼藉を働くとは言語道断！\nこの事直ちに帝に言上し、きっと公儀に掛け合うてくれる故、心しておじゃれ！', 'https://hoge.com?align=center' ), 'test/shut_the_fuck_up_i_am_so_celebrated.txt' );
-  writeto( new Bubbler().vertmap( '複線\nドリフト!!' ), 'test/multi_track_drifting.vert.txt' );
-  writeto( new Bubbler().vertmap( 'Multi-\nTrack\nDrifting!!' ), 'test/en_multi_track_drifting.vert.txt' );
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
+
+  console.log( new Bubbler().render( '突然の死', '?vertical=0' ) );
+  const contents = require( './test/contents.json' );
+  contents.bubblerRender
+    .forEach( ( obj ) => {
+      //console.log( new Bubbler().render( obj.text, obj.option ) );
+    } );
 } else if( typeof module === 'undefined' ) {
   // should be a browser on client
 } else if( typeof module !== 'undefined' ) {
