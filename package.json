@@ -5,7 +5,8 @@
   "main": "speech-bubbler.js",
   "scripts": {
     "test": "mocha test/*.js",
-    "tw": "nodemon -e js,json,txt,test/*.js -x 'npm t'"
+    "tw": "nodemon -e js,json,txt,test/*.js -x 'npm t'",
+    "live-server": "live-server ."
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,9 @@
   "homepage": "https://github.com/o2346/speech-bubbler#readme",
   "devDependencies": {
     "mocha": "^6.2.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "live-server": "^1.2.1"
+  },
+  "dependencies": {
   }
 }
