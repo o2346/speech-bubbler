@@ -1,0 +1,24 @@
+{
+  "name": "speech-bubbler",
+  "version": "0.0.2",
+  "description": "An immitation among [Sudden-death Generators（突然の死ジェネレータ）](https://www.google.co.jp/search?safe=off&num=24&hl=en&q=%E7%AA%81%E7%84%B6%E3%81%AE%E6%AD%BB+%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF)",
+  "main": "speech-bubbler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o2346/speech-bubbler.git"
+  },
+  "keywords": [
+    "突然の死",
+    "sudden-death",
+    "speech-bubbler"
+  ],
+  "author": "o2346",
+  "license": "SEE LICENSE IN README.md",
+  "bugs": {
+    "url": "https://github.com/o2346/speech-bubbler/issues"
+  },
+  "homepage": "https://github.com/o2346/speech-bubbler#readme"
+}
