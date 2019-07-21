@@ -11,6 +11,8 @@
           '<div style="font-family: monospace">',
           new Bubbler().render( '複線\nドリフト!!' ).replace( /\n/g, '<br>' ),
           '<br>',
+          new Bubbler().render( '複線\nドリフト!!!', '?edge=rectanble&propotional=0' ).replace( /\n/g, '<br>' ),
+          '<br>',
           new Bubbler().render( 'ここは,ﾋﾝﾄ･ﾏｰｹｯﾄ\n⊊ﾆ|ＴＯＫＹＵ|ﾆ⊋ \n E|ＨＡＮＤＳ|ﾖ ', '?edge=rectanble&padding=1&align=center&propotional=0' ).replace( /\n/g, '<br>' ),
           '<br>',
           new Bubbler().render( '痔が\nなおります\nように', '?edge=label&vertical=0&padding=0&propotional=0' ).replace( /\n/g, '<br>' ),
@@ -18,29 +20,28 @@
         )
       );
       //https://stackoverflow.com/questions/9838812/how-can-i-open-a-json-file-in-javascript-without-jquery
-      function loadJSON(path, success, error)
-      {
-          var xhr = new XMLHttpRequest();
-          xhr.onreadystatechange = function()
-          {
-              if (xhr.readyState === XMLHttpRequest.DONE) {
-                  if (xhr.status === 200) {
-                      if (success)
-                          success(JSON.parse(xhr.responseText));
-                  } else {
-                      if (error)
-                          error(xhr);
-                  }
-              }
-          };
-          xhr.open("GET", path, true);
-          xhr.send();
-      }
+    function loadJSON(path, success, error)
+    {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            if (success)
+              success(JSON.parse(xhr.responseText));
+          } else {
+            if (error)
+              error(xhr);
+          }
+        }
+      };
+      xhr.open("GET", path, true);
+      xhr.send();
+    }
 
-      loadJSON('test/contents.json',
-               function(data) { console.log(data.hoge); },
-               function(xhr) { console.error(xhr); }
-      );
+    loadJSON('test/contents.json',
+     function(data) { console.log(data); },
+     function(xhr) { console.error(xhr); }
+    );
     </script>
   </body>
 </html>

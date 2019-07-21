@@ -186,8 +186,15 @@ class Bubbler {
    * @returns {undefined}
    */
   getLengthOstensible( str ) {
+    const chars = [
+      '⊊⊋',
+      '⊆⊂',
+      '⊇⊃',
+      '\x09-\x0d\x20-\x7e\uff61-\uff9f'
+    ];
+    //https://en.wikipedia.org/wiki/List_of_mathematical_symbols
     let width = 0;
-    str.replace( new RegExp( '[⊊⊋\x09-\x0d\x20-\x7e\uff61-\uff9f]|(.)', 'gu' ), ( _, isFull ) => width += isFull ? 1 : 0.5 );
+    str.replace( new RegExp( '['.concat( chars.join( '' ), ']|(.)' ), 'gu' ), ( _, isFull ) => width += isFull ? 1 : 0.5 );
     return width;
   }
 
@@ -387,7 +394,7 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
   const b = new Bubbler();
   //https://wizball.io/questions/22523
-  console.log( b.render( 'ここは,ﾋﾝﾄ･ﾏｰｹｯﾄ\n⊊ﾆ|ＴＯＫＹＵ|ﾆ⊋ \n E|ＨＡＮＤＳ|ﾖ ', '?edge=rectanble&padding=0&align=center' ) );
+  console.log( b.render( 'CREATIVE LIFE STORE\n⊂ﾆﾆ|ＴＯＫＹＵ|ﾆﾆ⊃ \n Eﾆ|ＨＡＮＤＳ|ﾆﾖ  ', '?edge=rectanble&padding=0&align=center' ) );
   console.log( b.render( '僕アルバイトォォｫｫ!!', '?edge=rectanble&padding=2' ) );
   console.log( b.render( '痔が\nなおります\nように', '?edge=label&vertical=0&padding=0' ) );
 } else if( typeof module === 'undefined' ) {
