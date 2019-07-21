@@ -15,6 +15,7 @@ const breaks = /\r\n|\n|\r/;
 class Bubbler {
 
   constructor() {
+    //https://en.wikipedia.org/wiki/Box-drawing_character
     this.bubbleEdges = {
       'default': {
         left: '＞',
