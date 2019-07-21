@@ -339,6 +339,8 @@ class Bubbler {
     if( isProportional ) {
       this.edge.upper = this.edge.upper.charAt( 0 );
       this.edge.lower = this.edge.lower.charAt( 0 );
+      //this.edge.appendUpper = '';
+      //this.edge.appendLower = '';
     }
     let contents = null;
     if( this.parseQueries( 'vertical', queries ) ) {
