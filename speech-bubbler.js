@@ -63,11 +63,11 @@ class Bubbler {
       }
     };
     this.edge = this.bubbleEdges.default;
-    this.margin = '　'.repeat( 1 );
+    this.padding = '　'.repeat( 1 );
   }
 
-  setMargin( int ) {
-    this.margin = '　'.repeat( int );
+  setPadding( int ) {
+    this.padding = '　'.repeat( int );
   }
 
   setEdge( type ) {
@@ -191,10 +191,10 @@ class Bubbler {
    * @param centering
    * @returns {undefined}
    */
-  padding( str, distance, centering ) {
+  padRightSurface( str, distance, centering ) {
     const pad = String().concat( '　'.repeat( Math.ceil( distance ) ) );
-    const edgeLeft = this.edge.left.concat( this.margin );
-    const edgeRight = this.margin.concat( this.edge.right );
+    const edgeLeft = this.edge.left.concat( this.padding );
+    const edgeRight = this.padding.concat( this.edge.right );
     if( centering ) {
       const pads = [
         Math.trunc( pad.length / 2 ),
@@ -232,8 +232,8 @@ class Bubbler {
       centering = true;
     }
 
-    const edgeLeft = this.edge.left.concat( this.margin );
-    const edgeRight = this.margin.concat( this.edge.right );
+    const edgeLeft = this.edge.left.concat( this.padding );
+    const edgeRight = this.padding.concat( this.edge.right );
     return str.split( breaks )
       .map( ( l ) => {
         return String().concat( edgeLeft, l, edgeRight );
@@ -243,7 +243,7 @@ class Bubbler {
         let ans = '';
         const distance = maxLength - this.getLengthOstensible( l );
         if( distance > 0 ) {
-          ans = this.padding( l, distance, centering );
+          ans = this.padRightSurface( l, distance, centering );
         } else {
           ans = l;
         }
@@ -251,11 +251,11 @@ class Bubbler {
       } )
       .map( ( l, i, a ) => {
         const maxLength = Math.max( ...a.map( ( _l ) => { return this.getLengthOstensible( _l ); } ) );
-        return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), this.margin.concat( this.edge.right ) );
+        return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), this.padding.concat( this.edge.right ) );
       } )
       .map( ( l, i, a ) => {
         const re = new RegExp( '\s'.concat( this.edge.right, '$' ) );
-        const isSurplus = a.every( ( _l ) => { return _l.match( re ); } ) && this.margin.length === 0;
+        const isSurplus = a.every( ( _l ) => { return _l.match( re ); } ) && this.padding.length === 0;
         if( isSurplus ) {
           return l.replace( re, this.edge.right );
         }
@@ -365,7 +365,7 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
 
   const b = new Bubbler();
-  b.setMargin( 0 );
+  b.setPadding( 0 );
   b.setEdge( 'rectanble' );
   console.log( b.render( '僕アルバイトォォｫｫ!!', '?vertical=0' ) );
   b.setEdge( 'label' );
@@ -373,10 +373,6 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   b.setEdge( 'default' );
   console.log( b.render( '痔が\nなおりますように', '?vertical=0' ) );
   const contents = require( './test/contents.json' );
-  contents.bubblerRender
-    .forEach( ( obj ) => {
-      //console.log( new Bubbler().render( obj.text, obj.option ) );
-    } );
 } else if( typeof module === 'undefined' ) {
   // should be a browser on client
 } else if( typeof module !== 'undefined' ) {
