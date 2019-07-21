@@ -384,6 +384,7 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
 } else if( typeof require !== 'undefined' && require.main === module && process.stdin.isTTY ) {
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
   const b = new Bubbler();
+  //https://wizball.io/questions/22523
   console.log( b.render( 'ここは,ﾋﾝﾄ･ﾏｰｹｯﾄ\n⊊ﾆ|ＴＯＫＹＵ|ﾆ⊋ \n E|ＨＡＮＤＳ|ﾖ ', '?edge=rectanble&padding=0&align=center' ) );
   console.log( b.render( '僕アルバイトォォｫｫ!!', '?edge=rectanble&padding=2' ) );
   console.log( b.render( '痔が\nなおります\nように', '?edge=label&vertical=0&padding=0' ) );
