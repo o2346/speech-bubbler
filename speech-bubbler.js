@@ -62,18 +62,25 @@ class Bubbler {
         appendLower: '━',
       }
     };
-    this.edge = this.bubbleEdges.default;
-    this.padding = '　'.repeat( 1 );
+    this.setDefault();
   }
 
   setPadding( int ) {
-    this.padding = '　'.repeat( int );
+    if( !isNaN( parseInt( int, 10 ) ) ) {
+      this.padding = '　'.repeat( int );
+    }
   }
 
   setEdge( type ) {
     if( typeof type === 'string' && this.bubbleEdges[ type ] ) {
       this.edge = this.bubbleEdges[ type ];
     }
+  }
+
+  setDefault() {
+    this.edge = this.bubbleEdges.default;
+    this.padding = '　'.repeat( 1 );
+    this.setEdge( 'default' );
   }
 
   /**
@@ -179,7 +186,7 @@ class Bubbler {
    */
   getLengthOstensible( str ) {
     let width = 0;
-    str.replace( new RegExp( '[\x09-\x0d\x20-\x7e\uff61-\uff9f]|(.)', 'gu' ), ( _, isFull ) => width += isFull ? 1 : 0.5 );
+    str.replace( new RegExp( '[⊊⊋\x09-\x0d\x20-\x7e\uff61-\uff9f]|(.)', 'gu' ), ( _, isFull ) => width += isFull ? 1 : 0.5 );
     return width;
   }
 
@@ -204,7 +211,6 @@ class Bubbler {
           return '　'.repeat( p );
         } );
       pads[ 1 ] = ( Number.isInteger( distance ) ? pads[ 1 ] : pads[ 1 ].replace( /\s$/, ' ' ) ) + edgeRight;
-      //console.log( pad.length + ' ' + pads.join( '' ).length );
       return str.replace(
         new RegExp( '^' + edgeLeft ),
         edgeLeft + pads[ 0 ]
@@ -235,6 +241,9 @@ class Bubbler {
     const edgeLeft = this.edge.left.concat( this.padding );
     const edgeRight = this.padding.concat( this.edge.right );
     return str.split( breaks )
+      .filter( ( l ) => {
+        return l.length > 0;
+      } )
       .map( ( l ) => {
         return String().concat( edgeLeft, l, edgeRight );
       } )
@@ -249,6 +258,7 @@ class Bubbler {
         }
         return ans;
       } )
+      /*
       .map( ( l, i, a ) => {
         const maxLength = Math.max( ...a.map( ( _l ) => { return this.getLengthOstensible( _l ); } ) );
         return Number.isInteger( maxLength ) ? l : l.replace( new RegExp( edgeRight + '$' ), this.padding.concat( this.edge.right ) );
@@ -261,6 +271,7 @@ class Bubbler {
         }
         return l;
       } )
+      */
       .join( '\n' );
   }
 
@@ -290,7 +301,7 @@ class Bubbler {
     )
       .split( '' )
       .reduce( ( accum, c, i, a ) => {
-        if( i === Math.floor( a.length / 2 ) - 1 ) {
+        if( i === Math.ceil( this.getLengthOstensible( a.join( '' ) ) / 2 ) - 1 ) {
           return accum.concat( this.edge.upperCenter );
         }
         return accum.concat( c );
@@ -319,6 +330,10 @@ class Bubbler {
     if( !str ) {
       return null;
     }
+    const edgeType = this.parseQueries( 'edge', queries );
+    this.setEdge( edgeType );
+    const paddingAmount = this.parseQueries( 'padding', queries );
+    this.setPadding( paddingAmount );
     let contents = null;
     if( this.parseQueries( 'vertical', queries ) ) {
       contents = this.obtainInnerContents( this.vertmap( str ), queries );
@@ -326,6 +341,8 @@ class Bubbler {
       contents = this.obtainInnerContents( str, queries );
     }
     const uplw     = this.getUpperLower( contents );
+
+    this.setDefault();
 
     return [
       uplw[ 0 ],
@@ -340,12 +357,10 @@ class Bubbler {
    * @returns {undefined}
    */
   main() {
-    //console.log( parseQueries( 'foo', '?foo=lorem&bar=&baz' ) )  //
     const queries = process.argv
       .find( ( argv ) => {
         return argv.match( /\?(.+\=.*&?)+/ );
       } );
-    //console.log( parseQueries( 'align', queries ) );
     const input = [];
     require( 'readline' )
       .createInterface( { input: process.stdin } )
@@ -360,19 +375,12 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   //console.log( 'called directly' );
   new Bubbler().main();
   //https://www.google.co.jp/search?&tbm=isch&safe=off&q=高橋啓介の8200系個別分散式VVVFはダテじゃねえ+複線ドリフト
-  //console.log( render( '僕アルバイトォォｫｫ!!' ) );
 } else if( typeof require !== 'undefined' && require.main === module && process.stdin.isTTY ) {
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
-
   const b = new Bubbler();
-  b.setPadding( 0 );
-  b.setEdge( 'rectanble' );
-  console.log( b.render( '僕アルバイトォォｫｫ!!', '?vertical=0' ) );
-  b.setEdge( 'label' );
-  console.log( b.render( '突然の死\n複線ドリフト!!!', '' ) );
-  b.setEdge( 'default' );
-  console.log( b.render( '痔が\nなおりますように', '?vertical=0' ) );
-  const contents = require( './test/contents.json' );
+  console.log( b.render( 'ここは,ﾋﾝﾄ･ﾏｰｹｯﾄ\n⊊ﾆ|ＴＯＫＹＵ|ﾆ⊋ \n E|ＨＡＮＤＳ|ﾖ ', '?edge=rectanble&padding=0&align=center' ) );
+  console.log( b.render( '僕アルバイトォォｫｫ!!', '?edge=rectanble&padding=2' ) );
+  console.log( b.render( '痔が\nなおります\nように', '?edge=label&vertical=0&padding=0' ) );
 } else if( typeof module === 'undefined' ) {
   // should be a browser on client
 } else if( typeof module !== 'undefined' ) {
