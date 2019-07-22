@@ -13,7 +13,7 @@
           '<br>',
           new Bubbler().render( '複線\nドリフト!!!', '?edge=rectanble&propotional=0' ).replace( /\n/g, '<br>' ),
           '<br>',
-          new Bubbler().render( 'ここは,ﾋﾝﾄ･ﾏｰｹｯﾄ\n⊊ﾆ|ＴＯＫＹＵ|ﾆ⊋ \n E|ＨＡＮＤＳ|ﾖ ', '?edge=rectanble&padding=1&align=center&propotional=0' ).replace( /\n/g, '<br>' ),
+          new Bubbler().render( 'CREATIVE LIFE STORE\n⊂ﾆﾆ|ＴＯＫＹＵ|ﾆﾆ⊃ \n Eﾆ|ＨＡＮＤＳ|ﾆﾖ  ', '?edge=rectanble&padding=1&align=center&propotional=0' ).replace( /\n/g, '<br>' ),
           '<br>',
           new Bubbler().render( '痔が\nなおります\nように', '?edge=label&vertical=0&padding=0&propotional=0' ).replace( /\n/g, '<br>' ),
           '</div>'
@@ -39,7 +39,22 @@
     }
 
     loadJSON('test/contents.json',
-     function(data) { console.log(data); },
+      ( data ) => {
+        data.bubblerRender
+          .forEach( ( obj ) => {
+            return;
+            console.log( obj );
+            const c = new Bubbler().render( obj.text, obj.option.concat( '&propotional=0' ) );
+            console.log( c );
+            document.write(
+              String().concat(
+                '<div style="font-family: monospace">',
+                c,
+                '<br>',
+              ).concat( '</div>' )
+            );
+          } );
+      },
      function(xhr) { console.error(xhr); }
     );
     </script>
