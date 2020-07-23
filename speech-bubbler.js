@@ -391,11 +391,12 @@ if ( typeof require !== 'undefined' && require.main === module && !process.stdin
   new Bubbler().main();
   //https://www.google.co.jp/search?&tbm=isch&safe=off&q=高橋啓介の8200系個別分散式VVVFはダテじゃねえ+複線ドリフト
 } else if( typeof require !== 'undefined' && require.main === module && process.stdin.isTTY ) {
+  //demo
   //for f in test/*.txt; do cat $f; printf "\n$f\n";  done
   const b = new Bubbler();
   //https://wizball.io/questions/22523
   console.log( b.render( 'CREATIVE LIFE STORE\n⊂ﾆﾆ|ＴＯＫＹＵ|ﾆﾆ⊃ \n Eﾆ|ＨＡＮＤＳ|ﾆﾖ  ', '?edge=rectanble&padding=0&align=center' ) );
-  console.log( b.render( '僕アルバイトォォｫｫ!!', '?edge=rectanble&padding=2' ) );
+  console.log( b.render( '僕アルバイトォォｫｫ!!', '?padding=2' ) );
   console.log( b.render( '痔が\nなおります\nように', '?edge=label&vertical=0&padding=0' ) );
 } else if( typeof module === 'undefined' ) {
   // should be a browser on client
